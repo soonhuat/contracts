@@ -72,6 +72,7 @@ async function main() {
       OceanTokenAddress = "0x967da4048cD07aB37855c090aAF366e4ce1b9F48";
       additionalApprovedTokens = ["0x0642026E7f0B6cCaC5925b4E7Fa61384250e1701"];
       gasPrice = ethers.utils.parseUnits('12', 'gwei')
+      sleepAmount = 30
       sleepAmount = 10
       shouldDeployV4 = false;
       shouldDeployDF = true;
@@ -122,16 +123,27 @@ async function main() {
       additionalApprovedTokens = ["0xC5248Aa0629C0b2d6A02834a5f172937Ac83CBD3"];
       break;
     case 81001:
-        networkName = "polygonedge";
-        OceanTokenAddress = "0x282d8efCe846A88B159800bd4130ad77443Fa1A1";
-        OPFOwner = "0xad8a12eB81489FBdfb38B9598e523E5B976BcD04";
-        routerOwner = OPFOwner;
-        sleepAmount = 10
-        shouldDeployOceanToken = true;
-        shouldDeployDF = false;
-        shouldDeployVE = false;
-        gasLimit = 8388608;
-        break;
+      networkName = "polygonedge";
+      OceanTokenAddress = "0x282d8efCe846A88B159800bd4130ad77443Fa1A1";
+      OPFOwner = "0xad8a12eB81489FBdfb38B9598e523E5B976BcD04";
+      routerOwner = OPFOwner;
+      sleepAmount = 10
+      shouldDeployOceanToken = true;
+      shouldDeployDF = false;
+      shouldDeployVE = false;
+      gasLimit = 8388608;
+      break;
+    case 96001:
+      networkName = "polygonedge";
+      OceanTokenAddress = "0x282d8efCe846A88B159800bd4130ad77443Fa1A1";
+      OPFOwner = "0xad8a12eB81489FBdfb38B9598e523E5B976BcD04";
+      routerOwner = OPFOwner;
+      sleepAmount = 10
+      shouldDeployOceanToken = true;
+      shouldDeployDF = false;
+      shouldDeployVE = false;
+      gasLimit = 19000000;
+      break;
     case 0x507:
       networkName = "moonbase";
       OPFOwner = '0xd8992Ed72C445c35Cb4A2be468568Ed1079357c8';
