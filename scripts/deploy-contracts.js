@@ -41,7 +41,7 @@ async function main() {
   const network = provider.getNetwork();
   // utils
   const networkDetails = await network;
-
+  
 
   let wallet;
   if (process.env.MNEMONIC)
@@ -60,7 +60,7 @@ async function main() {
   let OceanTokenAddress;
   let gasLimit = 8000000;
   let gasPrice = null;
-  let sleepAmount = 10;
+  let sleepAmount = 120;
   let additionalApprovedTokens = []
   console.log("Using chain " + networkDetails.chainId);
   switch (networkDetails.chainId) {
@@ -262,6 +262,8 @@ async function main() {
   else {
     addresses.Ocean = OceanTokenAddress;
   }
+
+  
   if (shouldDeployMocks) {
     if (logging) console.info("Deploying Mocks");
     // DEPLOY DAI and USDC for TEST (barge etc)
