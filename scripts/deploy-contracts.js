@@ -41,7 +41,7 @@ async function main() {
   const network = provider.getNetwork();
   // utils
   const networkDetails = await network;
-  
+
 
   let wallet;
   if (process.env.MNEMONIC)
@@ -131,7 +131,7 @@ async function main() {
       shouldDeployOceanToken = true;
       shouldDeployDF = false;
       shouldDeployVE = false;
-      gasLimit = 8388608;
+      gasLimit = 19000000;
       break;
     case 96001:
       networkName = "polygonedge";
@@ -143,6 +143,18 @@ async function main() {
       shouldDeployDF = false;
       shouldDeployVE = false;
       gasLimit = 19000000;
+      break;
+    case 296:
+    case 298:
+      networkName = "hedera";
+      OceanTokenAddress = "0x282d8efCe846A88B159800bd4130ad77443Fa1A1";
+      OPFOwner = "0xad8a12eB81489FBdfb38B9598e523E5B976BcD04";
+      routerOwner = OPFOwner;
+      sleepAmount = 120
+      shouldDeployOceanToken = true;
+      shouldDeployDF = false;
+      shouldDeployVE = false;
+      gasLimit = 8000000;
       break;
     case 0x507:
       networkName = "moonbase";
@@ -263,6 +275,7 @@ async function main() {
     addresses.Ocean = OceanTokenAddress;
   }
 
+  if (sleepAmount > 0) await sleep(sleepAmount)
   
   if (shouldDeployMocks) {
     if (logging) console.info("Deploying Mocks");
@@ -276,6 +289,7 @@ async function main() {
     const USDC = await ERC20Mock.connect(owner).deploy("USDC", "USDC", 6, options);
     addresses.MockUSDC = USDC.address;
 
+    if (sleepAmount > 0) await sleep(sleepAmount)
   }
   
 
