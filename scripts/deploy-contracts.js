@@ -168,7 +168,7 @@ async function main() {
       shouldDeployV4 = true;
       shouldDeployDF = false;
       shouldDeployVE = false;
-      sleepAmount = 0;
+      sleepAmount = 30;
       OceanTokenAddress = "0x0000000000000000000000000000000002ebe304";
       break;
     case 0x507:
@@ -473,52 +473,54 @@ async function main() {
       console.log("\tnpx hardhat verify --network " + networkName + " " + addresses.ERC721Factory + " " + addresses.templateERC721 + " " + addresses.templateERC20 + " " + addresses.Router)
     }
     if (sleepAmount > 0) await sleep(sleepAmount)
-    const nftCount = await factoryERC721.attach(addresses.ERC721Factory).getCurrentNFTTemplateCount(options);
-    const nftTemplate = await factoryERC721.attach(addresses.ERC721Factory).getNFTTemplate(nftCount,options);
+    const factoryERC721Contract = factoryERC721.attach(addresses.ERC721Factory)
+    const nftCount = await factoryERC721Contract.getCurrentNFTTemplateCount(options);
+    const nftTemplate = await factoryERC721Contract.getNFTTemplate(nftCount,options);
     addresses.ERC721Template[nftCount.toString()] = addresses.templateERC721;
-    let currentTokenCount = await factoryERC721.attach(addresses.ERC721Factory).getCurrentTemplateCount(options);
-    let tokenTemplate = await factoryERC721.attach(addresses.ERC721Factory).getTokenTemplate(currentTokenCount,options);
+    let currentTokenCount = await factoryERC721Contract.getCurrentTemplateCount(options);
+    let tokenTemplate = await factoryERC721Contract.getTokenTemplate(currentTokenCount,options);
     addresses.ERC20Template[currentTokenCount.toString()] = addresses.templateERC20;
     if (sleepAmount > 0) await sleep(sleepAmount)
     if (logging) console.info("Adding ERC20Enterprise to ERC721Factory");
-    const templateadd = await factoryERC721.attach(addresses.ERC721Factory).addTokenTemplate(addresses.templateERC20Enterprise, options);
+    const templateadd = await factoryERC721Contract.addTokenTemplate(addresses.templateERC20Enterprise, options);
     await templateadd.wait();
     if (sleepAmount > 0) await sleep(sleepAmount)
-    currentTokenCount = await factoryERC721.attach(addresses.ERC721Factory).getCurrentTemplateCount(options);
-    tokenTemplate = await factoryERC721.attach(addresses.ERC721Factory).getTokenTemplate(currentTokenCount,options);
+    currentTokenCount = await factoryERC721Contract.getCurrentTemplateCount(options);
+    tokenTemplate = await factoryERC721Contract.getTokenTemplate(currentTokenCount,options);
     addresses.ERC20Template[currentTokenCount.toString()] =
       addresses.templateERC20Enterprise;
 
     // SET REQUIRED ADDRESS
     if (sleepAmount > 0) await sleep(sleepAmount)
     if (logging) console.info("Adding addresses.ERC721Factory(" + addresses.ERC721Factory + ") to router");
-    const factoryAddTx = await router.attach(addresses.Router).addFactory(addresses.ERC721Factory, options);
+    const routerContract = router.attach(addresses.Router)
+    const factoryAddTx = await routerContract.addFactory(addresses.ERC721Factory, options);
     await factoryAddTx.wait();
     if (sleepAmount > 0) await sleep(sleepAmount)
     if (logging) console.info("Adding addresses.FixedPrice(" + addresses.FixedPrice + ") to router");
-    const freAddTx = await router.attach(addresses.Router).addFixedRateContract(addresses.FixedPrice, options);
+    const freAddTx = await routerContract.addFixedRateContract(addresses.FixedPrice, options);
     await freAddTx.wait();
     if (sleepAmount > 0) await sleep(sleepAmount)
     if (logging) console.info("Adding addresses.Dispenser(" + addresses.Dispenser + ") to router");
-    const dispenserAddTx = await router.attach(addresses.Router).addDispenserContract(addresses.Dispenser, options);
+    const dispenserAddTx = await routerContract.addDispenserContract(addresses.Dispenser, options);
     await dispenserAddTx.wait();
     if (sleepAmount > 0) await sleep(sleepAmount)
     if (logging) console.info("Adding addresses.Staking(" + addresses.Staking + ") to router");
-    const ssAddTx = await router.attach(addresses.Router).addSSContract(addresses.Staking, options);
+    const ssAddTx = await routerContract.addSSContract(addresses.Staking, options);
     await ssAddTx.wait();
     if (sleepAmount > 0) await sleep(sleepAmount)
 
     // add additional tokens
     for (const token of additionalApprovedTokens) {
       if (logging) console.info("Adding " + token + " as approved token");
-      const tokenTx = await router.attach(addresses.Router).addApprovedToken(token, options);
+      const tokenTx = await routerContract.addApprovedToken(token, options);
       await tokenTx.wait();
     }
     // Avoid setting Owner an account we cannot use on barge for now
 
     if (ownerAddress != routerOwner) {
       if (logging) console.info("Moving ownerships to " + routerOwner)
-      const routerOwnerTx = await router.attach(addresses.Router).changeRouterOwner(routerOwner, options)
+      const routerOwnerTx = await routerContract.changeRouterOwner(routerOwner, options)
       await routerOwnerTx.wait()
 
     }
@@ -633,9 +635,10 @@ async function main() {
     const deployedSmartWalletChecker = await SmartWalletChecker.connect(owner).deploy(options);
     receipt = await deployedSmartWalletChecker.deployTransaction.wait();
     addresses.SmartWalletChecker = receipt.contractAddress;
-    const commit_checker = await deployedVEOCEAN.attach(addresses.veOCEAN).commit_smart_wallet_checker(addresses.SmartWalletChecker,options)
+    const deployedVeOceanContract = deployedVEOCEAN.attach(addresses.veOCEAN);
+    const commit_checker = await deployedVeOceanContract.commit_smart_wallet_checker(addresses.SmartWalletChecker,options)
     await commit_checker.wait();
-    const apply_checker = await deployedVEOCEAN.attach(addresses.veOCEAN).apply_smart_wallet_checker(options)
+    const apply_checker = await deployedVeOceanContract.apply_smart_wallet_checker(options)
     await apply_checker.wait();
     if(show_verify){
       console.log("\tRun the following to verify on etherscan");
@@ -645,17 +648,16 @@ async function main() {
     //ownerships
     if(routerOwner != ownerAddress){
       if (logging) console.info("Moving veOcean ownership to " + routerOwner)
-        let tx = await deployedVEOCEAN.attach(addresses.veOCEAN).commit_transfer_ownership(routerOwner,options)
+        let tx = await deployedVeOceanContract.commit_transfer_ownership(routerOwner,options)
         await tx.wait();
-        tx = await deployedVEOCEAN.attach(addresses.veOCEAN).apply_transfer_ownership(options)
+        tx = await deployedVeOceanContract.apply_transfer_ownership(options)
         await tx.wait();
-        tx = await deployedSmartWalletChecker.attach(addresses.SmartWalletChecker).setManager(routerOwner, true, options)
+        const deployedSmartWalletCheckerContract = deployedSmartWalletChecker.attach(addresses.SmartWalletChecker);
+        tx = await deployedSmartWalletCheckerContract.setManager(routerOwner, true, options)
         await tx.wait();
-        tx = await deployedSmartWalletChecker.attach(addresses.SmartWalletChecker).setManager(ownerAddress, false, options)
+        tx = await deployedSmartWalletCheckerContract.setManager(ownerAddress, false, options)
         await tx.wait();
-
     }
-
   }
 
   //DF contracts
@@ -690,11 +692,12 @@ async function main() {
     }
     if (sleepAmount > 0) await sleep(sleepAmount)
     //add strategy to DFRewards
-    const strategyTx = await deployedDFRewards.attach(addresses.DFRewards).addStrategy(addresses.DFStrategyV1, options);
+    const deployedDFRewardContract = deployedDFRewards.attach(addresses.DFRewards);
+    const strategyTx = await deployedDFRewardContract.addStrategy(addresses.DFStrategyV1, options);
     await strategyTx.wait();
     if (ownerAddress != routerOwner) {
       if (logging) console.info("Moving ownerships to " + routerOwner)
-      const DFRewardsOwnerTx = await deployedDFRewards.attach(addresses.DFRewards).transferOwnership(routerOwner, options)
+      const DFRewardsOwnerTx = await deployedDFRewardContract.transferOwnership(routerOwner, options)
       await DFRewardsOwnerTx.wait()
     }
   }
