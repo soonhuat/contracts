@@ -44,7 +44,7 @@ module.exports = {
       allowUnlimitedContractSize: true,
       forking: {
         url: process.env.ALCHEMY_URL,
-        blockNumber: 12545000,
+        blockNumber: 6860326,
       },
       gasPrice:1000000000
     },
@@ -120,7 +120,12 @@ module.exports = {
       accounts:
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
-
+    'gen-x-testnet': {
+      url:
+        process.env.NETWORK_RPC_URL !== undefined ? process.env.NETWORK_RPC_URL : "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    }
   },
   etherscan: {
     apiKey: process.env.ETHERSCAN_API_KEY

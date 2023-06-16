@@ -162,6 +162,17 @@ async function main() {
       shouldDeployVE = false;
       sleepAmount = 1
       break;
+    case 100:
+      networkName = "GEN-X";
+      OPFOwner = '0x2E33C6014222A47585605F8379a1877eaaF0ec13'
+      routerOwner = OPFOwner;
+      OceanTokenAddress = "0x0995527d3473b3A98C471f1ED8787ACD77fBF009";
+      gasLimit = 8388608
+      shouldDeployOceanToken = false;
+      shouldDeployDF = false;
+      shouldDeployVE = false;
+      sleepAmount = 5
+      break;
     case 80001:
       networkName = "mumbai";
       OPFOwner = '0x06100AB868206861a4D7936166A91668c2Ce1312'
@@ -277,25 +288,27 @@ async function main() {
   }
   
 
-  if (shouldDeployOPFCommunityFeeCollector || !addresses.OPFCommunityFeeCollector) {
-    if (logging) console.info("Deploying OPF Community Fee");
-    const OPFCommunityFeeCollector = await ethers.getContractFactory(
-      "OPFCommunityFeeCollector",
-      owner
-    );
-    const opfcommunityfeecollector = await OPFCommunityFeeCollector.connect(owner).deploy(
-      OPFOwner,
-      OPFOwner,
-      options
-    );
-    await opfcommunityfeecollector.deployTransaction.wait();
-    addresses.OPFCommunityFeeCollector = opfcommunityfeecollector.address;
-    if (show_verify) {
-      console.log("\tRun the following to verify on etherscan");
-      console.log("\tnpx hardhat verify --network " + networkName + " " + opfcommunityfeecollector.address + " " + OPFOwner + " " + OPFOwner)
-    }
-    if (sleepAmount > 0) await sleep(sleepAmount)
-  }
+  // gen-x dynamic comment
+  // if (shouldDeployOPFCommunityFeeCollector || !addresses.OPFCommunityFeeCollector) {
+  //   if (logging) console.info("Deploying OPF Community Fee");
+  //   const OPFCommunityFeeCollector = await ethers.getContractFactory(
+  //     "OPFCommunityFeeCollector",
+  //     owner
+  //   );
+  //   const opfcommunityfeecollector = await OPFCommunityFeeCollector.connect(owner).deploy(
+  //     OPFOwner,
+  //     OPFOwner,
+  //     options
+  //   );
+  //   await opfcommunityfeecollector.deployTransaction.wait();
+  //   addresses.OPFCommunityFeeCollector = opfcommunityfeecollector.address;
+  //   if (show_verify) {
+  //     console.log("\tRun the following to verify on etherscan");
+  //     console.log("\tnpx hardhat verify --network " + networkName + " " + opfcommunityfeecollector.address + " " + OPFOwner + " " + OPFOwner)
+  //   }
+  //   if (sleepAmount > 0) await sleep(sleepAmount)
+  // }
+  addresses.OPFCommunityFeeCollector = "0x881b0E849745A65e2E082B629b5C7EDa500768fb"
   
   // v4 contracts
   if (shouldDeployV4) {
@@ -315,143 +328,190 @@ async function main() {
     if (sleepAmount > 0) await sleep(sleepAmount)
     */
     
-    if (logging) console.log("Deploying Router");
-    const Router = await ethers.getContractFactory("FactoryRouter", owner);
-    const router = await Router.connect(owner).deploy(
-      owner.address,
-      addresses.Ocean,
-      DEAD_ADDRESS,
-      addresses.OPFCommunityFeeCollector,
-      [],
-      options
+    // gen-x dynamic comment
+    // if (logging) console.log("Deploying Router");
+    // const Router = await ethers.getContractFactory("FactoryRouter", owner);
+    // const router = await Router.connect(owner).deploy(
+    //   owner.address,
+    //   addresses.Ocean,
+    //   DEAD_ADDRESS,
+    //   addresses.OPFCommunityFeeCollector,
+    //   [],
+    //   options
+    // );
+    // const receipt = await router.deployTransaction.wait();
+    // addresses.startBlock = receipt.blockNumber
+    // addresses.Router = router.address;
+    // if (show_verify) {
+    //   console.log("\tRun the following to verify on etherscan");
+    //   console.log("\tcat > args1.js\n");
+    //   console.log("\tmodule.exports=[\n");
+    //   console.log("\t'" + owner.address + "',\n");
+    //   console.log("\t'" + addresses.Ocean + "',\n");
+    //   console.log("\t'" + DEAD_ADDRESS + "',\n");
+    //   console.log("\t'" + addresses.OPFCommunityFeeCollector + "',\n");
+    //   console.log("\t[]\n");
+    //   console.log("\t];");
+    //   console.log("\tCTRL+D");
+    //   console.log("\tnpx hardhat verify --network " + networkName + " --constructor-args args1.js " + addresses.Router)
+    // }
+    // if (sleepAmount > 0) await sleep(sleepAmount)
+    addresses.startBlock = 6943161
+    addresses.Router = "0x7f3414Da079706b9675984D10F9FFa958456f1bc"
+    // var router = { address : "0x7f3414Da079706b9675984D10F9FFa958456f1bc"}
+
+    const FactoryRouterContract = await ethers.getContractFactory("FactoryRouter");
+    const router = await FactoryRouterContract.attach(
+      "0x7f3414Da079706b9675984D10F9FFa958456f1bc" // The deployed contract address
     );
-    const receipt = await router.deployTransaction.wait();
-    addresses.startBlock = receipt.blockNumber
-    addresses.Router = router.address;
-    if (show_verify) {
-      console.log("\tRun the following to verify on etherscan");
-      console.log("\tcat > args1.js\n");
-      console.log("\tmodule.exports=[\n");
-      console.log("\t'" + owner.address + "',\n");
-      console.log("\t'" + addresses.Ocean + "',\n");
-      console.log("\t'" + DEAD_ADDRESS + "',\n");
-      console.log("\t'" + addresses.OPFCommunityFeeCollector + "',\n");
-      console.log("\t[]\n");
-      console.log("\t];");
-      console.log("\tCTRL+D");
-      console.log("\tnpx hardhat verify --network " + networkName + " --constructor-args args1.js " + addresses.Router)
-    }
-    if (sleepAmount > 0) await sleep(sleepAmount)
-    if (logging) console.info("Deploying FixedrateExchange");
-    const FixedPriceExchange = await ethers.getContractFactory(
-      "FixedRateExchange",
-      owner
-    );
-    const fixedPriceExchange = await FixedPriceExchange.connect(owner).deploy(
-      router.address,
-      options
-    );
-    await fixedPriceExchange.deployTransaction.wait();
-    addresses.FixedPrice = fixedPriceExchange.address;
-    if (show_verify) {
-      console.log("\tRun the following to verify on etherscan");
-      console.log("\tnpx hardhat verify --network " + networkName + " " + addresses.FixedPrice + " " + router.address)
-    }
-    if (sleepAmount > 0) await sleep(sleepAmount)
-    if (logging) console.info("Deploying StakingContract");
-    const SSContract = await ethers.getContractFactory("SideStaking", owner);
-    const ssPool = await SSContract.connect(owner).deploy(router.address, options);
-    await ssPool.deployTransaction.wait();
-    addresses.Staking = ssPool.address;
-    if (show_verify) {
-      console.log("\tRun the following to verify on etherscan");
-      console.log("\tnpx hardhat verify --network " + networkName + " " + addresses.Staking + " " + router.address)
-    }
+    console.log('router', router)
+
+
+    // gen-x dynamic comment
+    // if (logging) console.info("Deploying FixedrateExchange");
+    // const FixedPriceExchange = await ethers.getContractFactory(
+    //   "FixedRateExchange",
+    //   owner
+    // );
+    // const fixedPriceExchange = await FixedPriceExchange.connect(owner).deploy(
+    //   router.address,
+    //   options
+    // );
+    // await fixedPriceExchange.deployTransaction.wait();
+    // addresses.FixedPrice = fixedPriceExchange.address;
+    // if (show_verify) {
+    //   console.log("\tRun the following to verify on etherscan");
+    //   console.log("\tnpx hardhat verify --network " + networkName + " " + addresses.FixedPrice + " " + router.address)
+    // }
+    // if (sleepAmount > 0) await sleep(sleepAmount)
+    addresses.FixedPrice = "0x03c2375A40cEAF427F7738693AD81C34F765f4f1"
+    var fixedPriceExchange = { address : "0x03c2375A40cEAF427F7738693AD81C34F765f4f1"}
+
+    // gen-x dynamic comment
+    // if (logging) console.info("Deploying StakingContract");
+    // const SSContract = await ethers.getContractFactory("SideStaking", owner);
+    // const ssPool = await SSContract.connect(owner).deploy(router.address, options);
+    // await ssPool.deployTransaction.wait();
+    // addresses.Staking = ssPool.address;
+    // if (show_verify) {
+    //   console.log("\tRun the following to verify on etherscan");
+    //   console.log("\tnpx hardhat verify --network " + networkName + " " + addresses.Staking + " " + router.address)
+    // }
+    addresses.Staking = "0xf3a853de3D179b0Ed5BA6E71ABB3600EB614e020";
+    var ssPool = { address : "0xf3a853de3D179b0Ed5BA6E71ABB3600EB614e020"}
     addresses.ERC20Template = {};
-    if (sleepAmount > 0) await sleep(sleepAmount)
-    if (logging) console.info("Deploying ERC20 Template");
-    const ERC20Template = await ethers.getContractFactory("ERC20Template", owner);
-    const templateERC20 = await ERC20Template.connect(owner).deploy(options);
-    await templateERC20.deployTransaction.wait();
-    if (show_verify) {
-      console.log("\tRun the following to verify on etherscan");
-      console.log("\tnpx hardhat verify --network " + networkName + " " + templateERC20.address)
-    }
-    if (sleepAmount > 0) await sleep(sleepAmount)
-    if (logging) console.info("Deploying ERC20 Enterprise Template");
-    const ERC20TemplateEnterprise = await ethers.getContractFactory(
-      "ERC20TemplateEnterprise",
-      owner
-    );
-    const templateERC20Enterprise = await ERC20TemplateEnterprise.connect(owner).deploy(options);
-    await templateERC20Enterprise.deployTransaction.wait();
-    if (show_verify) {
-      console.log("\tRun the following to verify on etherscan");
-      console.log("\tnpx hardhat verify --network " + networkName + " " + templateERC20Enterprise.address)
-    }
+
+    // gen-x dynamic comment
+    addresses.templateERC20 = "0x6FC22510CD159724F6fD23c7C068866047cCAe3b"
+    var templateERC20 = { address :"0x6FC22510CD159724F6fD23c7C068866047cCAe3b"}
+    // if (sleepAmount > 0) await sleep(sleepAmount)
+    // if (logging) console.info("Deploying ERC20 Template");
+    // const ERC20Template = await ethers.getContractFactory("ERC20Template", owner);
+    // const templateERC20 = await ERC20Template.connect(owner).deploy(options);
+    // await templateERC20.deployTransaction.wait();
+    // if (show_verify) {
+    //   console.log("\tRun the following to verify on etherscan");
+    //   console.log("\tnpx hardhat verify --network " + networkName + " " + templateERC20.address)
+    // }
+    // if (sleepAmount > 0) await sleep(sleepAmount)
+
+
+    // gen-x dynamic comment
+    var templateERC20Enterprise = { address: "0x5f8463174bCCEEBF60edd77303275F87CDEa6690"}
+    // if (logging) console.info("Deploying ERC20 Enterprise Template");
+    // const ERC20TemplateEnterprise = await ethers.getContractFactory(
+    //   "ERC20TemplateEnterprise",
+    //   owner
+    // );
+    // const templateERC20Enterprise = await ERC20TemplateEnterprise.connect(owner).deploy(options);
+    // await templateERC20Enterprise.deployTransaction.wait();
+    // if (show_verify) {
+    //   console.log("\tRun the following to verify on etherscan");
+    //   console.log("\tnpx hardhat verify --network " + networkName + " " + templateERC20Enterprise.address)
+    // }
+
+
+    // gen-x dynamic comment
+    var templateERC721 = { address: "0xD6E0EF71AECedA1d3c6A4a3BcfFCb2EB6bfaF469"}
     addresses.ERC721Template = {};
-    if (sleepAmount > 0) await sleep(sleepAmount)
-    if (logging) console.info("Deploying ERC721 Template");
-    const ERC721Template = await ethers.getContractFactory(
-      "ERC721Template",
-      owner
-    );
-    const templateERC721 = await ERC721Template.connect(owner).deploy(options);
-    await templateERC721.deployTransaction.wait();
-    if (show_verify) {
-      console.log("\tRun the following to verify on etherscan");
-      console.log("\tnpx hardhat verify --network " + networkName + " " + templateERC721.address)
-    }
-    if (sleepAmount > 0) await sleep(sleepAmount)
-    if (logging) console.info("Deploying Dispenser");
-    const Dispenser = await ethers.getContractFactory("Dispenser", owner);
-    const dispenser = await Dispenser.connect(owner).deploy(router.address, options);
-    await dispenser.deployTransaction.wait();
+    // if (sleepAmount > 0) await sleep(sleepAmount)
+    // if (logging) console.info("Deploying ERC721 Template");
+    // const ERC721Template = await ethers.getContractFactory(
+    //   "ERC721Template",
+    //   owner
+    // );
+    // const templateERC721 = await ERC721Template.connect(owner).deploy(options);
+    // await templateERC721.deployTransaction.wait();
+    // if (show_verify) {
+    //   console.log("\tRun the following to verify on etherscan");
+    //   console.log("\tnpx hardhat verify --network " + networkName + " " + templateERC721.address)
+    // }
+    // if (sleepAmount > 0) await sleep(sleepAmount)
+
+    // gen-x dynamic comment
+    var dispenser = { address : "0x5cC523863d29a0a588747627c30D72E991489B66"}
+    // if (logging) console.info("Deploying Dispenser");
+    // const Dispenser = await ethers.getContractFactory("Dispenser", owner);
+    // const dispenser = await Dispenser.connect(owner).deploy(router.address, options);
+    // await dispenser.deployTransaction.wait();
     addresses.Dispenser = dispenser.address;
-    if (show_verify) {
-      console.log("\tRun the following to verify on etherscan");
-      console.log("\tnpx hardhat verify --network " + networkName + " " + dispenser.address + " " + router.address)
-    }
-    if (sleepAmount > 0) await sleep(sleepAmount)
-    if (logging) {
-      const params = {
+    // if (show_verify) {
+    //   console.log("\tRun the following to verify on etherscan");
+    //   console.log("\tnpx hardhat verify --network " + networkName + " " + dispenser.address + " " + router.address)
+    // }
+    // if (sleepAmount > 0) await sleep(sleepAmount)
 
-        "ERC721": templateERC721.address,
-        "ERC20": templateERC20.address,
-        "Router": router.address
-      }
-      console.info("Deploying ERC721 Factory");
-      console.info(params)
-    }
 
-    const ERC721Factory = await ethers.getContractFactory("ERC721Factory", owner);
-    const factoryERC721 = await ERC721Factory.connect(owner).deploy(
-      templateERC721.address,
-      templateERC20.address,
-      router.address,
-      options
+    // gen-x dynamic comment
+    // var factoryERC721 = { address : "0xc6cf0aec4Dc43E2925F62681EEb66Aa5D24c1ce3"}
+    const ERC721FactoryContract = await ethers.getContractFactory("ERC721Factory");
+    const factoryERC721 = await ERC721FactoryContract.attach(
+      "0xc6cf0aec4Dc43E2925F62681EEb66Aa5D24c1ce3" // The deployed contract address
     );
-    await factoryERC721.deployTransaction.wait();
-    if (show_verify) {
-      console.log("\tRun the following to verify on etherscan");
-      console.log("\tnpx hardhat verify --network " + networkName + " " + factoryERC721.address + " " + templateERC721.address + " " + templateERC20.address + " " + router.address)
-    }
-    if (sleepAmount > 0) await sleep(sleepAmount)
+    console.log('factoryERC721', factoryERC721)
+    // const factoryERC721 = await hre.ethers.getContractAt("ERC721Factory", "0x2E33C6014222A47585605F8379a1877eaaF0ec13");
+
+
+    // if (logging) {
+    //   const params = {
+
+    //     "ERC721": templateERC721.address,
+    //     "ERC20": templateERC20.address,
+    //     "Router": router.address
+    //   }
+    //   console.info("Deploying ERC721 Factory");
+    //   console.info(params)
+    // }
+
+    // const ERC721Factory = await ethers.getContractFactory("ERC721Factory", owner);
+    // const factoryERC721 = await ERC721Factory.connect(owner).deploy(
+    //   templateERC721.address,
+    //   templateERC20.address,
+    //   router.address,
+    //   options
+    // );
+    // await factoryERC721.deployTransaction.wait();
+    // if (show_verify) {
+    //   console.log("\tRun the following to verify on etherscan");
+    //   console.log("\tnpx hardhat verify --network " + networkName + " " + factoryERC721.address + " " + templateERC721.address + " " + templateERC20.address + " " + router.address)
+    // }
+    // if (sleepAmount > 0) await sleep(sleepAmount)
+    
     addresses.ERC721Factory = factoryERC721.address;
-    const nftCount = await factoryERC721.getCurrentNFTTemplateCount(options);
-    const nftTemplate = await factoryERC721.getNFTTemplate(nftCount,options);
-    addresses.ERC721Template[nftCount.toString()] = templateERC721.address;
-    let currentTokenCount = await factoryERC721.getCurrentTemplateCount(options);
-    let tokenTemplate = await factoryERC721.getTokenTemplate(currentTokenCount,options);
-    addresses.ERC20Template[currentTokenCount.toString()] = templateERC20.address;
+    // const nftCount = await factoryERC721.getCurrentNFTTemplateCount(options);
+    // const nftTemplate = await factoryERC721.getNFTTemplate(nftCount,options);
+    addresses.ERC721Template[1] = templateERC721.address;
+    // let currentTokenCount = await factoryERC721.getCurrentTemplateCount(options);
+    // let tokenTemplate = await factoryERC721.getTokenTemplate(currentTokenCount,options);
+    addresses.ERC20Template[1] = templateERC20.address;
     if (sleepAmount > 0) await sleep(sleepAmount)
     if (logging) console.info("Adding ERC20Enterprise to ERC721Factory");
     const templateadd = await factoryERC721.connect(owner).addTokenTemplate(templateERC20Enterprise.address, options);
     await templateadd.wait();
     if (sleepAmount > 0) await sleep(sleepAmount)
-    currentTokenCount = await factoryERC721.getCurrentTemplateCount(options);
-    tokenTemplate = await factoryERC721.getTokenTemplate(currentTokenCount,options);
-    addresses.ERC20Template[currentTokenCount.toString()] =
+    // currentTokenCount = await factoryERC721.getCurrentTemplateCount(options);
+    // tokenTemplate = await factoryERC721.getTokenTemplate(currentTokenCount,options);
+    addresses.ERC20Template[2] =
       templateERC20Enterprise.address;
 
     // SET REQUIRED ADDRESS
