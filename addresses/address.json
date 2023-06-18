@@ -264,5 +264,23 @@
     },
     "Dispenser": "0x8c98ea273bA22327F896Aa1a1a46E1BFf56e9b1D",
     "ERC721Factory": "0x49E35cd2bAE043Abd9074B6e5a649a5AdEB05C33"
+  },
+  "sepolia": {
+    "chainId": 11155111,
+    "Ocean": "0xE371731B215490FF9525c57c8DA6393555cbfFA3",
+    "OPFCommunityFeeCollector": "0xeA2405327195016C62e6588d504b7883425fF514",
+    "startBlock": 3715278,
+    "Router": "0x2f6160dc836c9Ea5069Cd282d24512bDef06f526",
+    "FixedPrice": "0x3D3AcA34DAdCe6d7bA10ebCF54CdC86981bBd51b",
+    "Staking": "0x55381Fa8a7A4e0FE6b28e11411af8369F972b33b",
+    "ERC20Template": {
+      "1": "0x08b9C0B92c677e0DF71101F4dA7F8730D45D5edc",
+      "2": "0xEFcfC011fe760D8b92502f39C6FD7e9fFcc7D003"
+    },
+    "ERC721Template": {
+      "1": "0x94703cC00c009a303AB3C45d1eBf254609534c3a"
+    },
+    "Dispenser": "0x6C5B8bf57372851ED4481b36A39082900d0043dC",
+    "ERC721Factory": "0xb5e8C263ebdeC4ee34efef0e83174771429348DB"
   }
 }

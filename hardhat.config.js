@@ -44,9 +44,9 @@ module.exports = {
       allowUnlimitedContractSize: true,
       forking: {
         url: process.env.ALCHEMY_URL,
-        blockNumber: 12545000,
+        blockNumber: 3715000,
       },
-      gasPrice:1000000000
+      gasPrice: "auto"
     },
     mainnet: {
       url:
@@ -67,6 +67,12 @@ module.exports = {
         process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
     },
     goerli: {
+      url:
+        process.env.NETWORK_RPC_URL !== undefined ? process.env.NETWORK_RPC_URL : "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+    sepolia: {
       url:
         process.env.NETWORK_RPC_URL !== undefined ? process.env.NETWORK_RPC_URL : "",
       accounts:

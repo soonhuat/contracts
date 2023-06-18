@@ -75,6 +75,14 @@ async function main() {
         sleepAmount = 2
         gasPrice = ethers.utils.parseUnits('5', 'gwei')
         break;
+    case 0xaa36a7:
+      networkName = "sepolia";
+      OceanTokenAddress = "0xCfDdA22C9837aE76E0faA845354f33C62E03653a";
+      OPFOwner = "0xEE1673089A4831D92324932e38e2EBDe6aB17274";
+      routerOwner = OPFOwner;
+      sleepAmount = 2
+      gasPrice = ethers.utils.parseUnits('5', 'gwei')
+      break;
     case 0x89:
       networkName = "polygon";
       productionNetwork = true;
