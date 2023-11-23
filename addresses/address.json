@@ -268,5 +268,23 @@
     },
     "Dispenser": "0x2720d405ef7cDC8a2E2e5AeBC8883C99611d893C",
     "ERC721Factory": "0xEF62FB495266C72a5212A11Dce8baa79Ec0ABeB1"
+  },
+  "acentrik-testnet": {
+    "chainId": 13520,
+    "Ocean": "0x9D5bcd87543E09b49aa0adE5D9B286A1482cF2B0",
+    "OPFCommunityFeeCollector": "0xBfA08Ec3C2c96a8e7D57559fb6E4a53dd5A3d2Dd",
+    "startBlock": 14632,
+    "Router": "0x243aAFc9A610c57b1432cBDa27FC9b20289D9B44",
+    "FixedPrice": "0x8DFe6C0FE19De2b8dA44D359277f6d79D4B93d06",
+    "Staking": "0xe968eEBB360F1806Df3161940301Dd9E730cD1B4",
+    "ERC20Template": {
+      "1": "0x873D50513A7B635d92A4Bc856B1Cbd47A058b1cf",
+      "2": "0x9e06f2feCe54C37F92c9174E65DD5a39bAB29317"
+    },
+    "ERC721Template": {
+      "1": "0x3Ca592Ba714dF2710a99B0feD440716Ab6cd7963"
+    },
+    "Dispenser": "0x9E38111080365Aa29Dc4CC5C700F59707EB86898",
+    "ERC721Factory": "0x05515D997118d135CB23C8435747F6084F6e4D4b"
   }
 }

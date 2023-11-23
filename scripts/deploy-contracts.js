@@ -174,8 +174,8 @@ async function main() {
       sleepAmount = 2
       shouldDeployOceanToken = false;
       shouldDeployV4 = false;
-      shouldDeployDF = true;
-      shouldDeployVE = true;
+      shouldDeployDF = false;
+      shouldDeployVE = false;
       break;
     case 0x38:
       networkName = "bsc";
@@ -231,6 +231,16 @@ async function main() {
       shouldDeployV4 = true;
       shouldDeployDF = false;
       shouldDeployVE = false;
+      break;
+    case 13520:
+      networkName = "acentrik-testnet";
+      OPFOwner = '0xa472B8fEea4CB77581570154Db6EC45C32e2E004'
+      routerOwner = OPFOwner;
+      sleepAmount = 10
+      shouldDeployOceanToken = true;
+      shouldDeployDF = false;
+      shouldDeployVE = false;
+      gasLimit = 8000000;
       break;
 
     default:
